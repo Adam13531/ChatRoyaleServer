@@ -46,7 +46,7 @@ function processUserCommand(cmd: string) {
   const restOfWords = words.slice(1)
   switch (firstWord) {
     case 'start':
-      game.startRound()
+      game.handleStartMessage()
       break
     case 'status':
       game.printStatus()
@@ -139,4 +139,8 @@ async function main() {
   prompt()
 }
 
-main()
+try {
+  main()
+} catch (e) {
+  console.error('Error occurred from main: ', e)
+}

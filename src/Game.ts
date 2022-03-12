@@ -37,8 +37,11 @@ export default class Game {
   currentPlayers: Record<string, Player> = {}
   roundNumber: number = 0
 
-  canStartRound() {
-    return this.currentState == GameState.Idle
+  canAdvanceGameState() {
+    return (
+      this.currentState == GameState.Idle ||
+      this.currentState == GameState.Lobby
+    )
   }
 
   public onChatMessage(tags: Record<string, any>, message: string) {
@@ -80,7 +83,7 @@ export default class Game {
     const numCurrentPlayers = _.size(this.currentPlayers)
     const playersString = this.getPlayersRemainingString()
     console.log(`---Game status---
-Game state: ${this.currentState}
+Game state: ${this.getStateStringFromState(this.currentState)}
 Players remaining: ${numCurrentPlayers} / ${numAllPlayers}
 Names: ${playersString}`)
   }
@@ -106,9 +109,28 @@ Names: ${playersString}`)
     console.log(`Player #${sender.joinOrder} joined: ${sender.displayName}`)
   }
 
-  public startRound() {
-    if (!this.canStartRound()) {
-      console.error(`Can't start round. currentState == ${this.currentState}`)
+  public getStateStringFromState(state: GameState): string {
+    switch (state) {
+      case GameState.Idle:
+        return 'IDLE'
+      case GameState.Lobby:
+        return 'LOBBY'
+      case GameState.Round:
+        return 'ROUND'
+      case GameState.InBetween:
+        return 'INBETWEEN'
+      case GameState.End:
+        return 'END'
+      default:
+        return 'UNRECOGNIZED'
+    }
+  }
+
+  public handleStartMessage() {
+    if (!this.canAdvanceGameState()) {
+      console.error(
+        `Can't handle "start" message. currentState == ${this.currentState}`
+      )
       return
     }
 
@@ -118,6 +140,9 @@ Names: ${playersString}`)
       case GameState.Idle:
         this.currentState = GameState.Lobby
         break
+      case GameState.Lobby:
+        this.currentState = GameState.Round
+        break
       default:
         console.error(
           `Could start a round, but no handler exists for transitioning. currentState == ${this.currentState}`
@@ -126,7 +151,9 @@ Names: ${playersString}`)
     }
 
     console.error(
-      `Started round. GameState went from ${oldState} → ${this.currentState}`
+      `Started round. GameState went from ${this.getStateStringFromState(
+        oldState
+      )} → ${this.getStateStringFromState(this.currentState)}`
     )
   }
 }
