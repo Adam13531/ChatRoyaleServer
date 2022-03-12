@@ -92,6 +92,19 @@ Names: ${playersString}`)
     // TODO: code round logic
   }
 
+  private getAllPlayerNames(): string[] {
+    return _.map(this.allPlayers, 'displayName')
+  }
+
+  public getFullStateMessage(): object {
+    const state = {
+      type: 'STATE',
+      gameState: this.currentState,
+      players: this.getAllPlayerNames(),
+    }
+    return state
+  }
+
   // All chat messages sent in the lobby are considered to join the player to
   // the game.
   private handleLobbyChatMessage(sender: Player) {

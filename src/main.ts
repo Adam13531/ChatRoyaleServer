@@ -21,7 +21,7 @@ function startSocketServer() {
     })
 
     console.log('Sending something')
-    ws.send('something')
+    ws.send(JSON.stringify(game.getFullStateMessage()))
   })
 }
 
