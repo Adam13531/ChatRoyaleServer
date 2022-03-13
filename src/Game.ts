@@ -149,6 +149,33 @@ Names: ${playersString}`)
     }
   }
 
+  private startRound() {
+    const prompt =
+      'If your name has an A in it, type "fizz". If it has an E, type "buzz". If it has both, type "fizzbuzz". If it has neither, type "buzzfizz".'
+    const duplicatesAllowed = true
+    const time = 20
+
+    const startMessage = this.formRoundStartMessage(
+      prompt,
+      duplicatesAllowed,
+      time
+    )
+    this.broadcastToAll(startMessage)
+  }
+
+  private formRoundStartMessage(
+    prompt: string,
+    duplicatesAllowed: boolean,
+    time: number
+  ) {
+    return JSON.stringify({
+      type: 'ROUND_START',
+      prompt,
+      duplicatesAllowed,
+      time,
+    })
+  }
+
   public handleStartMessage() {
     if (!this.canAdvanceGameState()) {
       console.error(
@@ -165,6 +192,7 @@ Names: ${playersString}`)
         break
       case GameState.Lobby:
         this.currentState = GameState.Round
+        this.startRound()
         break
       default:
         console.error(
@@ -174,7 +202,7 @@ Names: ${playersString}`)
     }
 
     console.error(
-      `Started round. GameState went from ${this.getStateStringFromState(
+      `Handling "start"; GameState went from ${this.getStateStringFromState(
         oldState
       )} → ${this.getStateStringFromState(this.currentState)}`
     )
