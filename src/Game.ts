@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import FizzBuzz from './prompts/FizzBuzz'
 import Prompt from './prompts/Prompt'
+import Player from './Player'
 
 enum GameState {
   Idle = 1, // waiting for a command to start things
@@ -8,26 +9,6 @@ enum GameState {
   Round, // playing a round
   InBetween, // between rounds. Waiting for a command to start the next round.
   End, // The game is over
-}
-
-export type Player = {
-  displayName: string
-  username: string
-  isMod: boolean
-  userId: string
-  joinOrder: number
-  lostInRound: number
-}
-
-function makePlayerFromTags(tags: Record<string, any>): Player {
-  return {
-    displayName: tags['display-name'] || tags.username,
-    username: tags.username,
-    isMod: tags.mod,
-    userId: tags['user-id'],
-    joinOrder: -1,
-    lostInRound: -1,
-  }
 }
 
 export default class Game {
@@ -62,7 +43,7 @@ export default class Game {
       const sender = this.allPlayers[userId]
       // Only process messages from players who are already being tracked (since
       // you can't join mid-game).
-      if (sender) {
+      if (sender && !sender.didLose()) {
         this.prompt.processChatMessage(sender, tags, message)
       }
     }
@@ -73,8 +54,8 @@ export default class Game {
   }
 
   public playerLost(player: Player) {
-    // A player can't lose if we're not already tracking them
-    if (!this.isTrackingPlayer(player.userId)) {
+    // A player can't lose if we're not tracking them or they already lost
+    if (!this.isTrackingPlayer(player.userId) || player.didLose()) {
       return
     }
 
@@ -92,7 +73,7 @@ export default class Game {
   private getPlayersRemainingString(): string {
     const threshold = 100
     const numCurrentPlayers = _.size(this.currentPlayers)
-    if (numCurrentPlayers == 0) return '(no one has joined yet)'
+    if (numCurrentPlayers == 0) return '(no players to list)'
     if (numCurrentPlayers > threshold)
       return `too many players to list (>${threshold} players)"`
 
@@ -131,7 +112,7 @@ Names: ${playersString}`)
       return
     }
 
-    const sender = makePlayerFromTags(tags)
+    const sender = Player.PlayerFromTags(tags)
 
     const numPlayers = _.size(this.allPlayers)
     sender.joinOrder = numPlayers

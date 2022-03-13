@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import Game, { Player } from '../Game'
+import Game from '../Game'
+import Player from '../Player'
 
 export default abstract class Prompt {
   public prompt: string

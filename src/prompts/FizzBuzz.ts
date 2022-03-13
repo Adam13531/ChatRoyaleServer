@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import Game, { Player } from '../Game'
+import Game from '../Game'
+import Player from '../Player'
 import Prompt from './Prompt'
 
 export default class FizzBuzz extends Prompt {
@@ -8,7 +9,7 @@ export default class FizzBuzz extends Prompt {
     tags: Record<string, any>,
     message: string
   ) {
-    if (sender.lostInRound > -1) {
+    if (sender.didLose()) {
       return
     }
 
