@@ -1,4 +1,6 @@
 import _ from 'lodash'
+import FizzBuzz from './prompts/FizzBuzz'
+import Prompt from './prompts/Prompt'
 
 enum GameState {
   Idle = 1, // waiting for a command to start things
@@ -36,6 +38,8 @@ export default class Game {
   allPlayers: Record<string, Player> = {}
   currentPlayers: Record<string, Player> = {}
   roundNumber: number = 0
+  prompt: Prompt = null
+  roundTimerId: ReturnType<typeof setTimeout> = null
   broadcastToAll: (data: any, options?: object) => {}
 
   public constructor(broadcastToAll) {
@@ -55,7 +59,7 @@ export default class Game {
     if (this.currentState == GameState.Lobby) {
       this.handleLobbyChatMessage(sender)
     } else if (this.currentState == GameState.Round) {
-      this.handleRoundChatMessage(sender, message)
+      this.prompt.processChatMessage(sender, tags, message)
     }
   }
 
@@ -63,7 +67,7 @@ export default class Game {
     return player.userId in this.allPlayers
   }
 
-  private playerLost(player: Player) {
+  public playerLost(player: Player) {
     // A player can't lose if we're not already tracking them
     if (!this.isTrackingPlayer(player)) {
       return
@@ -71,6 +75,13 @@ export default class Game {
 
     delete this.currentPlayers[player.userId]
     this.allPlayers[player.userId].lostInRound = this.roundNumber
+
+    console.log(`Player #${player.joinOrder} lost: ${player.displayName}`)
+    this.broadcastToAll(this.formPlayerLostMessage(player.displayName))
+
+    if (_.size(this.currentPlayers) <= 1) {
+      this.endRound()
+    }
   }
 
   private getPlayersRemainingString(): string {
@@ -91,10 +102,6 @@ export default class Game {
 Game state: ${this.getStateStringFromState(this.currentState)}
 Players remaining: ${numCurrentPlayers} / ${numAllPlayers}
 Names: ${playersString}`)
-  }
-
-  private handleRoundChatMessage(sender: Player, message: string) {
-    // TODO: code round logic
   }
 
   private getAllPlayerNames(): string[] {
@@ -128,8 +135,25 @@ Names: ${playersString}`)
     this.broadcastToAll(this.formAddPlayerMessage(sender.displayName))
   }
 
+  private endRound() {
+    this.stopTimer()
+
+    const numRemainingPlayers = _.size(this.currentPlayers)
+    if (numRemainingPlayers == 0) {
+      // TODO: no winner
+    } else if (numRemainingPlayers == 1) {
+      // TODO: a winner
+    } else {
+      // TODO: play another round
+    }
+  }
+
   private formAddPlayerMessage(displayName: string) {
     return JSON.stringify({ type: 'ADD_PLAYER', player: displayName })
+  }
+
+  private formPlayerLostMessage(displayName: string) {
+    return JSON.stringify({ type: 'PLAYER_LOST', player: displayName })
   }
 
   public getStateStringFromState(state: GameState): string {
@@ -150,17 +174,32 @@ Names: ${playersString}`)
   }
 
   private startRound() {
-    const prompt =
-      'If your name has an A in it, type "fizz". If it has an E, type "buzz". If it has both, type "fizzbuzz". If it has neither, type "buzzfizz".'
-    const duplicatesAllowed = true
-    const time = 20
+    this.prompt = new FizzBuzz(this)
 
     const startMessage = this.formRoundStartMessage(
-      prompt,
-      duplicatesAllowed,
-      time
+      this.prompt.prompt,
+      this.prompt.duplicatesAllowed,
+      this.prompt.timer
     )
+    this.startTimer(this.prompt.timer)
     this.broadcastToAll(startMessage)
+  }
+
+  private stopTimer() {
+    if (this.roundTimerId != null) {
+      clearTimeout(this.roundTimerId)
+    }
+  }
+
+  private startTimer(timer: number) {
+    this.stopTimer()
+    this.roundTimerId = setTimeout(this.roundTimeIsUp, timer * 1000)
+  }
+
+  private roundTimeIsUp = () => {
+    // Check the Prompt to see who lost by not typing anything
+    this.prompt.timeIsUp(_.values(this.currentPlayers))
+    this.endRound()
   }
 
   private formRoundStartMessage(

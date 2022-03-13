@@ -4,7 +4,6 @@
     "build": "tsc --project .",
     "start": "yarn run build && node dist/main.js"
   },
-  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
