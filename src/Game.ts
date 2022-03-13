@@ -54,22 +54,27 @@ export default class Game {
   }
 
   public onChatMessage(tags: Record<string, any>, message: string) {
-    const sender: Player = makePlayerFromTags(tags)
+    const userId = tags['user-id']
 
     if (this.currentState == GameState.Lobby) {
-      this.handleLobbyChatMessage(sender)
+      this.handleLobbyChatMessage(tags)
     } else if (this.currentState == GameState.Round) {
-      this.prompt.processChatMessage(sender, tags, message)
+      const sender = this.allPlayers[userId]
+      // Only process messages from players who are already being tracked (since
+      // you can't join mid-game).
+      if (sender) {
+        this.prompt.processChatMessage(sender, tags, message)
+      }
     }
   }
 
-  private isTrackingPlayer(player: Player) {
-    return player.userId in this.allPlayers
+  private isTrackingPlayer(userId: string) {
+    return userId in this.allPlayers
   }
 
   public playerLost(player: Player) {
     // A player can't lose if we're not already tracking them
-    if (!this.isTrackingPlayer(player)) {
+    if (!this.isTrackingPlayer(player.userId)) {
       return
     }
 
@@ -119,11 +124,14 @@ Names: ${playersString}`)
 
   // All chat messages sent in the lobby are considered to join the player to
   // the game.
-  private handleLobbyChatMessage(sender: Player) {
+  private handleLobbyChatMessage(tags: Record<string, any>) {
     // We only want to add them if we're not already tracking them.
-    if (this.isTrackingPlayer(sender)) {
+    const userId = tags['user-id']
+    if (this.isTrackingPlayer(userId)) {
       return
     }
+
+    const sender = makePlayerFromTags(tags)
 
     const numPlayers = _.size(this.allPlayers)
     sender.joinOrder = numPlayers
