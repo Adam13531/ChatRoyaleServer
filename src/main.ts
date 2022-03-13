@@ -9,9 +9,27 @@ const wss: Server = new WebSocketServer({ port: 7896 })
 let tmiClient: any
 let game: Game
 
+function broadcastToAll(data, options = {}) {
+  broadcastToAllExcept(data, null, options)
+}
+
+function broadcastToAllExcept(
+  data,
+  exceptThisWs: WebSocket = null,
+  options = {}
+) {
+  wss.clients.forEach(function each(client: WebSocket) {
+    if (client !== exceptThisWs && client.readyState === WebSocket.OPEN) {
+      client.send(data, options)
+    }
+  })
+}
+
 function startSocketServer() {
+  // This is purely for connecting websockets. We don't trust clients to tell us
+  // their Twitch name; we'll get that from the chat stream.
   wss.on('connection', function connection(ws) {
-    console.log('Got a new connection')
+    console.log(`Got a new connection. Total: ${_.size(wss.clients)}`)
     ws.on('message', function message(data) {
       console.log('received: %s', data)
     })
@@ -127,7 +145,7 @@ function ensureEnvVars() {
 }
 
 function initGame() {
-  game = new Game()
+  game = new Game(broadcastToAll)
 }
 
 async function main() {

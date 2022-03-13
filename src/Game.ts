@@ -36,6 +36,11 @@ export default class Game {
   allPlayers: Record<string, Player> = {}
   currentPlayers: Record<string, Player> = {}
   roundNumber: number = 0
+  broadcastToAll: (data: any, options?: object) => {}
+
+  public constructor(broadcastToAll) {
+    this.broadcastToAll = broadcastToAll
+  }
 
   canAdvanceGameState() {
     return (
@@ -120,6 +125,11 @@ Names: ${playersString}`)
     this.currentPlayers[sender.userId] = sender
 
     console.log(`Player #${sender.joinOrder} joined: ${sender.displayName}`)
+    this.broadcastToAll(this.formAddPlayerMessage(sender.displayName))
+  }
+
+  private formAddPlayerMessage(displayName: string) {
+    return JSON.stringify({ type: 'ADD_PLAYER', player: displayName })
   }
 
   public getStateStringFromState(state: GameState): string {
