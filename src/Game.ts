@@ -53,7 +53,10 @@ export default class Game {
     return userId in this.allPlayers
   }
 
-  public playerLost(player: Player) {
+  public playerLost(
+    player: Player,
+    endRoundIfOnePlayerRemains: boolean = true
+  ) {
     // A player can't lose if we're not tracking them or they already lost
     if (!this.isTrackingPlayer(player.userId) || player.didLose()) {
       return
@@ -65,7 +68,7 @@ export default class Game {
     console.log(`Player #${player.joinOrder} lost: ${player.displayName}`)
     this.broadcastToAll(this.formPlayerLostMessage(player.displayName))
 
-    if (_.size(this.currentPlayers) <= 1) {
+    if (_.size(this.currentPlayers) <= 1 && endRoundIfOnePlayerRemains) {
       this.endRound()
     }
   }
@@ -128,13 +131,27 @@ Names: ${playersString}`)
     this.stopTimer()
 
     const numRemainingPlayers = _.size(this.currentPlayers)
+    let winner: string = null
     if (numRemainingPlayers == 0) {
-      // TODO: no winner
+      // End with no winner
+      this.currentState = GameState.End
     } else if (numRemainingPlayers == 1) {
-      // TODO: a winner
+      // End with a winner
+      this.currentState = GameState.End
+      const finalPlayer = _.first(_.values(this.currentPlayers))
+      winner = finalPlayer.displayName
     } else {
-      // TODO: play another round
+      // Not at the end yet
+      this.currentState = GameState.InBetween
     }
+
+    this.broadcastToAll(this.formEndRoundMessage(this.currentState, winner))
+  }
+
+  private formEndRoundMessage(nextState: GameState, winner: string = null) {
+    // The winner is only used if nextState is END, but I don't want to make two
+    // separate messages out of laziness.
+    return JSON.stringify({ type: 'ROUND_END', nextState, winner })
   }
 
   private formAddPlayerMessage(displayName: string) {

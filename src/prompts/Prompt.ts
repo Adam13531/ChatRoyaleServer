@@ -51,13 +51,16 @@ export default abstract class Prompt {
       const messagesTypedByThisPlayer =
         this.messagesTypedPerPlayer[player.userId]
       if (_.isEmpty(messagesTypedByThisPlayer)) {
-        this.playerLost(player)
+        this.playerLost(player, false)
       }
     })
   }
 
-  protected playerLost(player: Player) {
-    this.game.playerLost(player)
+  protected playerLost(
+    player: Player,
+    endRoundIfOnePlayerRemains: boolean = true
+  ) {
+    this.game.playerLost(player, endRoundIfOnePlayerRemains)
   }
 
   protected abstract preprocessChatMessage(
