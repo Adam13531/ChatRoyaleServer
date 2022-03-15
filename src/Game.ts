@@ -30,6 +30,7 @@ export default class Game {
   canAdvanceGameState() {
     return (
       this.currentState == GameState.Idle ||
+      this.currentState == GameState.InBetween ||
       this.currentState == GameState.Lobby
     )
   }
@@ -127,6 +128,11 @@ Names: ${playersString}`)
     this.broadcastToAll(this.formAddPlayerMessage(sender.displayName))
   }
 
+  private shouldGameEnd() {
+    const numRemainingPlayers = _.size(this.currentPlayers)
+    return numRemainingPlayers <= 1
+  }
+
   private endRound() {
     this.stopTimer()
 
@@ -180,6 +186,8 @@ Names: ${playersString}`)
   }
 
   private startRound() {
+    this.currentState = GameState.Round
+
     this.prompt = new FizzBuzz(this)
 
     const startMessage = this.formRoundStartMessage(
@@ -236,9 +244,17 @@ Names: ${playersString}`)
         this.currentState = GameState.Lobby
         break
       case GameState.Lobby:
-        this.currentState = GameState.Round
         this.startRound()
         break
+      case GameState.InBetween:
+        // It's possible that moderation happened and caused the game to end.
+        // It's also possible that some users evaded moderation, in which case
+        // they're allowed to continue since it's the mods' fault. 😡
+        if (this.shouldGameEnd()) {
+          this.endRound()
+        } else {
+          this.startRound()
+        }
       default:
         console.error(
           `Could start a round, but no handler exists for transitioning. currentState == ${this.currentState}`
