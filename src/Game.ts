@@ -20,6 +20,7 @@ export default class Game {
   currentPlayers: Record<string, Player> = {}
   roundNumber: number = 0
   prompt: Prompt = null
+  timerEndTime: number = 0
   roundTimerId: ReturnType<typeof setTimeout> = null
   broadcastToAll: (data: any, options?: object) => {}
 
@@ -92,9 +93,19 @@ export default class Game {
     const numAllPlayers = _.size(this.allPlayers)
     const numCurrentPlayers = _.size(this.currentPlayers)
     const playersString = this.getPlayersRemainingString()
+    let timerString = 'No timer running'
+    if (this.roundTimerId) {
+      const remainingTime = (this.timerEndTime - Date.now()) / 1000
+      if (remainingTime > 0) {
+        timerString = `${remainingTime}s remaining`
+      } else {
+        timerString = `${remainingTime}s over time`
+      }
+    }
     console.log(`---Game status---
 Game state: ${this.getStateStringFromState(this.currentState)}
 Players remaining: ${numCurrentPlayers} / ${numAllPlayers}
+Timer: ${timerString}
 Names: ${playersString}`)
   }
 
@@ -206,12 +217,15 @@ Names: ${playersString}`)
   private stopTimer() {
     if (this.roundTimerId != null) {
       clearTimeout(this.roundTimerId)
+      this.roundTimerId = null
     }
   }
 
   private startTimer(timer: number) {
     this.stopTimer()
-    this.roundTimerId = setTimeout(this.roundTimeIsUp, timer * 1000)
+    const numMs = timer * 1000
+    this.roundTimerId = setTimeout(this.roundTimeIsUp, numMs)
+    this.timerEndTime = Date.now() + numMs
   }
 
   private roundTimeIsUp = () => {
