@@ -4,6 +4,15 @@ import Player from '../Player'
 import Prompt from './Prompt'
 
 export default class FizzBuzz extends Prompt {
+  constructor(game: Game) {
+    const prompt =
+      'If your name has an A in it, type "fizz". If it has an E, type "buzz". If it has both, type "fizzbuzz". If it has neither, type "buzzfizz".'
+    const duplicatesAllowed = true
+    const timer = 20
+    const allowOneMessagePerPerson = true
+    super(game, prompt, duplicatesAllowed, timer, allowOneMessagePerPerson)
+  }
+
   public preprocessChatMessage(
     sender: Player,
     tags: Record<string, any>,
@@ -30,14 +39,5 @@ export default class FizzBuzz extends Prompt {
     if (!validMessage) {
       this.playerLost(sender)
     }
-  }
-
-  constructor(game: Game) {
-    const prompt =
-      'If your name has an A in it, type "fizz". If it has an E, type "buzz". If it has both, type "fizzbuzz". If it has neither, type "buzzfizz".'
-    const duplicatesAllowed = true
-    const timer = 20
-    const allowOneMessagePerPerson = true
-    super(game, prompt, duplicatesAllowed, timer, allowOneMessagePerPerson)
   }
 }

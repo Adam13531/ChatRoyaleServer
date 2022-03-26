@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import FizzBuzz from './prompts/FizzBuzz'
+import USStates from './prompts/USStates'
 import Prompt from './prompts/Prompt'
 import Player from './Player'
 
@@ -203,7 +204,7 @@ Names: ${playersString}`)
   private startRound() {
     this.currentState = GameState.Round
 
-    this.prompt = new FizzBuzz(this)
+    this.prompt = new USStates(this)
 
     const startMessage = this.formRoundStartMessage(
       this.prompt.prompt,
