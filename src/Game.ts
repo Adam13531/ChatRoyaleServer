@@ -31,8 +31,12 @@ export default class Game {
     return (
       this.currentState == GameState.Idle ||
       this.currentState == GameState.InBetween ||
-      this.currentState == GameState.Lobby
+      (this.currentState == GameState.Lobby && this.getNumTotalPlayers() > 1)
     )
+  }
+
+  getNumTotalPlayers() {
+    return _.size(this.allPlayers)
   }
 
   public onChatMessage(tags: Record<string, any>, message: string) {
@@ -232,7 +236,9 @@ Names: ${playersString}`)
   public handleStartMessage() {
     if (!this.canAdvanceGameState()) {
       console.error(
-        `Can't handle "start" message. currentState == ${this.currentState}`
+        `Can't handle "start" message. currentState == ${
+          this.currentState
+        }, numTotalPlayers == ${this.getNumTotalPlayers()}`
       )
       return
     }
