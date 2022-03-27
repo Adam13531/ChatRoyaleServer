@@ -6,6 +6,7 @@ export default abstract class Prompt {
   public prompt: string
   public duplicatesAllowed: boolean
   public timer: number
+  public requiresModeration: boolean
   protected allowOneAnswerPerPerson: boolean
   protected game: Game
   // Keys are the player's userId
@@ -16,13 +17,15 @@ export default abstract class Prompt {
     prompt: string,
     duplicatesAllowed: boolean,
     timer: number,
-    allowOneAnswerPerPerson: boolean
+    allowOneAnswerPerPerson: boolean,
+    requiresModeration: boolean
   ) {
     this.game = game
     this.prompt = prompt
     this.duplicatesAllowed = duplicatesAllowed
     this.timer = timer
     this.allowOneAnswerPerPerson = allowOneAnswerPerPerson
+    this.requiresModeration = requiresModeration
   }
 
   public processChatMessage(

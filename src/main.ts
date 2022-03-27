@@ -69,6 +69,9 @@ function processUserCommand(cmd: string) {
     case 'status':
       game.printStatus()
       break
+    case 'mod':
+      game.processModeration()
+      break
     case 'say':
       if (words.length < 2) {
         console.error('You must type something after "say"')

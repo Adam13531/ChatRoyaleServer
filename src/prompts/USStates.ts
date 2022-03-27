@@ -64,7 +64,15 @@ export default class USStates extends Prompt {
     const duplicatesAllowed = false
     const timer = 20
     const allowOneMessagePerPerson = true
-    super(game, prompt, duplicatesAllowed, timer, allowOneMessagePerPerson)
+    const requiresModeration = false
+    super(
+      game,
+      prompt,
+      duplicatesAllowed,
+      timer,
+      allowOneMessagePerPerson,
+      requiresModeration
+    )
 
     this.statesRemaining = new Set()
     _.forEach(states, (state) => this.statesRemaining.add(state.toLowerCase()))

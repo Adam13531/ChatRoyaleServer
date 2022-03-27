@@ -10,7 +10,15 @@ export default class FizzBuzz extends Prompt {
     const duplicatesAllowed = true
     const timer = 20
     const allowOneMessagePerPerson = true
-    super(game, prompt, duplicatesAllowed, timer, allowOneMessagePerPerson)
+    const requiresModeration = false
+    super(
+      game,
+      prompt,
+      duplicatesAllowed,
+      timer,
+      allowOneMessagePerPerson,
+      requiresModeration
+    )
   }
 
   public preprocessChatMessage(

@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import FizzBuzz from './prompts/FizzBuzz'
 import USStates from './prompts/USStates'
+import Colors from './prompts/Colors'
 import Prompt from './prompts/Prompt'
 import Player from './Player'
+import Moderation from './Moderation'
 
 enum GameState {
   Idle = 1, // waiting for a command to start things
@@ -23,10 +25,12 @@ export default class Game {
   prompt: Prompt = null
   timerEndTime: number = 0
   roundTimerId: ReturnType<typeof setTimeout> = null
+  moderation: Moderation
   broadcastToAll: (data: any, options?: object) => {}
 
   public constructor(broadcastToAll) {
     this.broadcastToAll = broadcastToAll
+    this.moderation = new Moderation()
   }
 
   canAdvanceGameState() {
@@ -52,6 +56,11 @@ export default class Game {
       // you can't join mid-game).
       if (sender && !sender.didLose()) {
         this.prompt.processChatMessage(sender, tags, message)
+        // We send messages to the moderators regardless of whether the prompt
+        // requires it. This is for very minor reasons, e.g. the ability to
+        // disqualify cheaters/jerks even if they were technically correct. It
+        // also gives the moderators something to look at.
+        this.moderation.addMessage(sender, tags, message)
       }
     }
   }
@@ -149,6 +158,33 @@ Names: ${playersString}`)
     return numRemainingPlayers <= 1
   }
 
+  // Doles out the moderators' judgment. This is safe to call multiple times.
+  // However, keep in mind that moderation can only DISQUALIFY a player, not
+  // bring them back from a loss. So if a mod screwed up, then too bad.
+  public processModeration() {
+    if (this.shouldGameEnd()) {
+      console.log('The game is already over. Not processing moderation.')
+      return
+    }
+
+    console.log("Doling out the moderators' judgment. ☠")
+
+    const peopleToDisqualify = this.moderation.getPeopleToDisqualify(
+      this.prompt.requiresModeration
+    )
+    _.forEach(peopleToDisqualify, (userId) => {
+      const player = this.allPlayers[userId]
+      this.playerLost(player, false)
+    })
+
+    // Now that all players are processed, we can potentially end the game.
+    if (this.shouldGameEnd()) {
+      this.endRound()
+    }
+
+    console.log(`Done. Disqualified ${_.size(peopleToDisqualify)} player(s)`)
+  }
+
   private endRound() {
     this.stopTimer()
 
@@ -213,6 +249,7 @@ Names: ${playersString}`)
     )
     this.startTimer(this.prompt.timer)
     this.broadcastToAll(startMessage)
+    this.moderation.startNewRound()
   }
 
   private stopTimer() {
@@ -268,14 +305,14 @@ Names: ${playersString}`)
         this.startRound()
         break
       case GameState.InBetween:
-        // It's possible that moderation happened and caused the game to end.
-        // It's also possible that some users evaded moderation, in which case
-        // they're allowed to continue since it's the mods' fault. 😡
         if (this.shouldGameEnd()) {
           this.endRound()
         } else {
+          // Process moderation if it hasn't been done manually already.
+          this.processModeration()
           this.startRound()
         }
+        break
       default:
         console.error(
           `Could start a round, but no handler exists for transitioning. currentState == ${this.currentState}`
