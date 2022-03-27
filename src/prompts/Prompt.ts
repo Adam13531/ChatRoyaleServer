@@ -69,6 +69,10 @@ export default abstract class Prompt {
     })
   }
 
+  protected makePlayerLoseByName(playerName: string) {
+    this.game.playerLostByName(playerName)
+  }
+
   protected playerLost(
     player: Player,
     endRoundIfOnePlayerRemains: boolean = true

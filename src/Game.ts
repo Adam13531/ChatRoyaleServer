@@ -18,7 +18,11 @@ export default class Game {
   currentState: GameState = GameState.Lobby
   // Keys are the player's userId
   allPlayers: Record<string, Player> = {}
+  // Keys are the player's userId
   currentPlayers: Record<string, Player> = {}
+
+  // Keys are the player's lowercase name
+  allPlayersByName: Record<string, Player> = {}
   roundNumber: number = 0
   prompt: Prompt = null
   timerEndTime: number = 0
@@ -67,6 +71,17 @@ export default class Game {
 
   private isTrackingPlayer(userId: string) {
     return userId in this.allPlayers
+  }
+
+  getPlayerByName(playerName: string): Player {
+    return this.allPlayersByName[playerName.toLowerCase()]
+  }
+
+  public playerLostByName(playerName: string) {
+    const player = this.getPlayerByName(playerName)
+    if (!_.isNil(player)) {
+      this.playerLost(player)
+    }
   }
 
   public playerLost(
@@ -155,6 +170,7 @@ Names: ${playersString}`)
     sender.joinOrder = numPlayers
 
     this.allPlayers[sender.userId] = sender
+    this.allPlayersByName[sender.username.toLowerCase()] = sender
     this.currentPlayers[sender.userId] = sender
 
     console.log(`Player #${sender.joinOrder} joined: ${sender.displayName}`)

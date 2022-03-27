@@ -4,6 +4,8 @@ import USStates from './USStates'
 import Colors from './Colors'
 import MessageOfLength from './MessageOfLength'
 import Spam from './Spam'
+import SequenceOfNumbers from './SequenceOfNumbers'
+import EliminateSomeone from './EliminateSomeone'
 
 type PromptClass =
   | typeof FizzBuzz
@@ -11,13 +13,23 @@ type PromptClass =
   | typeof Colors
   | typeof MessageOfLength
   | typeof Spam
+  | typeof SequenceOfNumbers
+  | typeof EliminateSomeone
 
 export default class PromptChooser {
   allPrompts: Array<PromptClass>
   availablePrompts: Array<PromptClass>
   public constructor() {
-    this.allPrompts = [FizzBuzz, USStates, Colors, MessageOfLength, Spam]
-    // this.allPrompts = [Spam]
+    this.allPrompts = [
+      FizzBuzz,
+      USStates,
+      Colors,
+      MessageOfLength,
+      Spam,
+      SequenceOfNumbers,
+      EliminateSomeone,
+    ]
+    // this.allPrompts = [EliminateSomeone]
     this.resetAvailablePrompts()
   }
 
