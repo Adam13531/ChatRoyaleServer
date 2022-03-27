@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { WebSocketServer, WebSocket, Server } from 'ws'
 import Player from './Player'
+import Prompt from './prompts/Prompt'
 
 enum ModerationStatus {
   Unmodded = 1,
@@ -19,13 +20,15 @@ interface MessageToModerate {
 export default class Moderation {
   wss: Server
   messages: Array<MessageToModerate> = []
+  prompt: Prompt
 
   public constructor() {
     this.startServer()
   }
 
-  public startNewRound() {
+  public startNewRound(prompt: Prompt) {
     this.messages = []
+    this.prompt = prompt
     this.broadcast(this.formEntireStateMessage())
   }
 
@@ -80,6 +83,8 @@ export default class Moderation {
     return JSON.stringify({
       type: 'STATE',
       messages: this.messages,
+      prompt: this.prompt.prompt,
+      promptRequiresModeration: this.prompt.requiresModeration,
     })
   }
 

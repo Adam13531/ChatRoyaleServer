@@ -249,7 +249,7 @@ Names: ${playersString}`)
     )
     this.startTimer(this.prompt.timer)
     this.broadcastToAll(startMessage)
-    this.moderation.startNewRound()
+    this.moderation.startNewRound(this.prompt)
   }
 
   private stopTimer() {
