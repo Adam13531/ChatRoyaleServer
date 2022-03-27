@@ -69,6 +69,9 @@ function processUserCommand(cmd: string) {
     case 'status':
       game.printStatus()
       break
+    case 'restart':
+      game.restart()
+      break
     case 'mod':
       game.processModeration()
       break

@@ -24,6 +24,10 @@ export default class Player {
     )
   }
 
+  public reset() {
+    this.lostInRound = -1
+  }
+
   public constructor(
     displayName: string,
     username: string,

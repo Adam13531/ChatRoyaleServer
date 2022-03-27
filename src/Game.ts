@@ -114,6 +114,22 @@ export default class Game {
     return _.map(this.currentPlayers, 'displayName')
   }
 
+  public restart() {
+    console.log('Restarting the game state (removing losers)')
+    this.stopTimer()
+    this.currentState = GameState.Lobby
+    this.currentPlayers = {}
+    _.forEach(this.allPlayers, (player: Player) => {
+      player.reset()
+      this.currentPlayers[player.userId] = player
+    })
+    this.roundNumber = 0
+    this.prompt = null
+    this.promptChooser.resetAvailablePrompts()
+
+    this.broadcastToAll(JSON.stringify(this.getFullStateMessage()))
+  }
+
   public printStatus() {
     const numAllPlayers = _.size(this.allPlayers)
     const numCurrentPlayers = _.size(this.currentPlayers)
