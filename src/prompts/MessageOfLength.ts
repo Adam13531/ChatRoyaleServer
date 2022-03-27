@@ -3,15 +3,16 @@ import Game from '../Game'
 import Player from '../Player'
 import Prompt from './Prompt'
 
-export default class Colors extends Prompt {
-  statesRemaining: Set<string>
+export default class MessageOfLength extends Prompt {
+  messageLength: number
 
   constructor(game: Game) {
-    const prompt = 'Name a color.'
+    const messageLength = _.random(16, 100)
+    const prompt = `Type a message exactly ${messageLength} characters long.`
     const duplicatesAllowed = false
     const timer = 20
     const allowOneAnswerPerPerson = true
-    const requiresModeration = true
+    const requiresModeration = false
     super(
       game,
       prompt,
@@ -20,11 +21,17 @@ export default class Colors extends Prompt {
       allowOneAnswerPerPerson,
       requiresModeration
     )
+
+    this.messageLength = messageLength
   }
 
   public preprocessChatMessage(
     sender: Player,
     tags: Record<string, any>,
     message: string
-  ) {}
+  ) {
+    if (message.length != this.messageLength) {
+      this.playerLost(sender)
+    }
+  }
 }

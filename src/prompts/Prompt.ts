@@ -45,6 +45,10 @@ export default abstract class Prompt {
     }
 
     messagesTypedByThisPlayer.push(message)
+
+    if (!sender.didLose()) {
+      this.postprocessChatMessage(sender, tags, message)
+    }
   }
 
   // Default implementation is to fail everyone who didn't type anything, then
@@ -66,9 +70,15 @@ export default abstract class Prompt {
     this.game.playerLost(player, endRoundIfOnePlayerRemains)
   }
 
-  protected abstract preprocessChatMessage(
+  protected preprocessChatMessage(
     sender: Player,
     tags: Record<string, any>,
     message: string
-  )
+  ) {}
+
+  protected postprocessChatMessage(
+    sender: Player,
+    tags: Record<string, any>,
+    message: string
+  ) {}
 }

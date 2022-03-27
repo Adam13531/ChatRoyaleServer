@@ -2,14 +2,22 @@ import _ from 'lodash'
 import FizzBuzz from './FizzBuzz'
 import USStates from './USStates'
 import Colors from './Colors'
+import MessageOfLength from './MessageOfLength'
+import Spam from './Spam'
+
+type PromptClass =
+  | typeof FizzBuzz
+  | typeof USStates
+  | typeof Colors
+  | typeof MessageOfLength
+  | typeof Spam
 
 export default class PromptChooser {
-  // Note: I don't know how to make the type more generic than "typeof
-  // FizzBuzz", so I'm using this all over the place.
-  allPrompts: Array<typeof FizzBuzz>
-  availablePrompts: Array<typeof FizzBuzz>
+  allPrompts: Array<PromptClass>
+  availablePrompts: Array<PromptClass>
   public constructor() {
-    this.allPrompts = [FizzBuzz, USStates, Colors]
+    this.allPrompts = [FizzBuzz, USStates, Colors, MessageOfLength, Spam]
+    // this.allPrompts = [Spam]
     this.resetAvailablePrompts()
   }
 
@@ -17,7 +25,7 @@ export default class PromptChooser {
     this.availablePrompts = _.clone(this.allPrompts)
   }
 
-  public choosePrompt(): typeof FizzBuzz {
+  public choosePrompt(): PromptClass {
     // Make sure we can't run out of prompts.
     if (_.isEmpty(this.availablePrompts)) {
       console.log('Ran out of available prompts. Resetting them all.')

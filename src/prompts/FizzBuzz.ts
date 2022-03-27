@@ -9,14 +9,14 @@ export default class FizzBuzz extends Prompt {
       'If your name has an A in it, type "fizz". If it has an E, type "buzz". If it has both, type "fizzbuzz". If it has neither, type "buzzfizz".'
     const duplicatesAllowed = true
     const timer = 20
-    const allowOneMessagePerPerson = true
+    const allowOneAnswerPerPerson = true
     const requiresModeration = false
     super(
       game,
       prompt,
       duplicatesAllowed,
       timer,
-      allowOneMessagePerPerson,
+      allowOneAnswerPerPerson,
       requiresModeration
     )
   }
