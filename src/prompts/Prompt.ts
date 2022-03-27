@@ -11,6 +11,7 @@ export default abstract class Prompt {
   protected game: Game
   // Keys are the player's userId
   protected messagesTypedPerPlayer: Record<string, string[]> = {}
+  protected messagesTypedByAnyone: Set<string> = new Set()
 
   constructor(
     game: Game,
@@ -45,6 +46,11 @@ export default abstract class Prompt {
     }
 
     messagesTypedByThisPlayer.push(message)
+
+    if (this.messagesTypedByAnyone.has(message.toLowerCase())) {
+      this.playerLost(sender)
+    }
+    this.messagesTypedByAnyone.add(message.toLowerCase())
 
     if (!sender.didLose()) {
       this.postprocessChatMessage(sender, tags, message)
