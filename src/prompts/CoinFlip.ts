@@ -3,14 +3,14 @@ import Game from '../Game'
 import Player from '../Player'
 import Prompt from './Prompt'
 
-export default class SequenceOfNumbers extends Prompt {
-  nextNumber: number
+export default class CoinFlip extends Prompt {
+  coinResult: string
 
   constructor(game: Game) {
-    const nextNumber = _.random(2, 999)
-    const prompt = `Type the next number in the sequence. The first person to send a message should start by typing ${nextNumber}.`
-    const duplicatesAllowed = false
-    const timer = 40
+    const coinResult = _.random(0, 1) === 0 ? 'heads' : 'tails'
+    const prompt = `I have flipped a virtual coin. Is it heads or tails?`
+    const duplicatesAllowed = true
+    const timer = 10
     const allowOneAnswerPerPerson = true
     const requiresModeration = false
     super(
@@ -22,7 +22,7 @@ export default class SequenceOfNumbers extends Prompt {
       requiresModeration
     )
 
-    this.nextNumber = nextNumber
+    this.coinResult = coinResult
   }
 
   public preprocessChatMessage(
@@ -30,9 +30,7 @@ export default class SequenceOfNumbers extends Prompt {
     tags: Record<string, any>,
     message: string
   ) {
-    if (message === `${this.nextNumber}`) {
-      this.nextNumber++
-    } else {
+    if (message.toLowerCase() != this.coinResult) {
       this.playerLost(sender)
     }
   }

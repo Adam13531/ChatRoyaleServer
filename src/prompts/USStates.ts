@@ -78,10 +78,6 @@ export default class USStates extends Prompt {
     tags: Record<string, any>,
     message: string
   ) {
-    if (sender.didLose()) {
-      return
-    }
-
     const lowerCase = message.toLowerCase()
 
     if (!states.has(lowerCase)) {

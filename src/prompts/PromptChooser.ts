@@ -6,6 +6,13 @@ import MessageOfLength from './MessageOfLength'
 import Spam from './Spam'
 import SequenceOfNumbers from './SequenceOfNumbers'
 import EliminateSomeone from './EliminateSomeone'
+import NotTwoPlusTwo from './NotTwoPlusTwo'
+import MultiplyNameLength from './MultiplyNameLength'
+import GottaGoFast from './GottaGoFast'
+import FirstGenPokemon from './FirstGenPokemon'
+import Rage from './RAGE'
+import CoinFlip from './CoinFlip'
+import Emojis from './Emojis'
 
 type PromptClass =
   | typeof FizzBuzz
@@ -15,6 +22,13 @@ type PromptClass =
   | typeof Spam
   | typeof SequenceOfNumbers
   | typeof EliminateSomeone
+  | typeof NotTwoPlusTwo
+  | typeof MultiplyNameLength
+  | typeof GottaGoFast
+  | typeof FirstGenPokemon
+  | typeof Rage
+  | typeof CoinFlip
+  | typeof Emojis
 
 export default class PromptChooser {
   allPrompts: Array<PromptClass>
@@ -28,8 +42,16 @@ export default class PromptChooser {
       Spam,
       SequenceOfNumbers,
       EliminateSomeone,
+      NotTwoPlusTwo,
+      MultiplyNameLength,
+      GottaGoFast,
+      FirstGenPokemon,
+      Rage,
+      CoinFlip,
+      Emojis,
     ]
-    // this.allPrompts = [EliminateSomeone]
+    console.log(`${_.size(this.allPrompts)} prompts loaded`)
+    // this.allPrompts = [Emojis]
     this.resetAvailablePrompts()
   }
 

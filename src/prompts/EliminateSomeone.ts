@@ -26,10 +26,6 @@ export default class EliminateSomeone extends Prompt {
     tags: Record<string, any>,
     message: string
   ) {
-    if (sender.didLose()) {
-      return
-    }
-
     this.makePlayerLoseByName(message)
   }
 }

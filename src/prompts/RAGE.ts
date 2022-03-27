@@ -3,16 +3,13 @@ import Game from '../Game'
 import Player from '../Player'
 import Prompt from './Prompt'
 
-export default class SequenceOfNumbers extends Prompt {
-  nextNumber: number
-
+export default class Rage extends Prompt {
   constructor(game: Game) {
-    const nextNumber = _.random(2, 999)
-    const prompt = `Type the next number in the sequence. The first person to send a message should start by typing ${nextNumber}.`
+    const prompt = 'ENGAGE CAPS LOCK AND COMPLAIN ABOUT SOMETHING.'
     const duplicatesAllowed = false
-    const timer = 40
+    const timer = 20
     const allowOneAnswerPerPerson = true
-    const requiresModeration = false
+    const requiresModeration = true
     super(
       game,
       prompt,
@@ -21,8 +18,6 @@ export default class SequenceOfNumbers extends Prompt {
       allowOneAnswerPerPerson,
       requiresModeration
     )
-
-    this.nextNumber = nextNumber
   }
 
   public preprocessChatMessage(
@@ -30,9 +25,7 @@ export default class SequenceOfNumbers extends Prompt {
     tags: Record<string, any>,
     message: string
   ) {
-    if (message === `${this.nextNumber}`) {
-      this.nextNumber++
-    } else {
+    if (message !== message.toUpperCase()) {
       this.playerLost(sender)
     }
   }

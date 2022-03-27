@@ -26,10 +26,6 @@ export default class FizzBuzz extends Prompt {
     tags: Record<string, any>,
     message: string
   ) {
-    if (sender.didLose()) {
-      return
-    }
-
     const name = sender.displayName.toLowerCase()
     const hasA = _.includes(name, 'a')
     const hasE = _.includes(name, 'e')

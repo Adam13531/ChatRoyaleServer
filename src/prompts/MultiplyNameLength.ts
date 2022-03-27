@@ -3,14 +3,14 @@ import Game from '../Game'
 import Player from '../Player'
 import Prompt from './Prompt'
 
-export default class SequenceOfNumbers extends Prompt {
-  nextNumber: number
+export default class MultiplyNameLength extends Prompt {
+  coefficient: number
 
   constructor(game: Game) {
-    const nextNumber = _.random(2, 999)
-    const prompt = `Type the next number in the sequence. The first person to send a message should start by typing ${nextNumber}.`
-    const duplicatesAllowed = false
-    const timer = 40
+    const coefficient = _.random(13, 99)
+    const prompt = `Multiple the number of characters in your name by ${coefficient}. What is the result?`
+    const duplicatesAllowed = true
+    const timer = 20
     const allowOneAnswerPerPerson = true
     const requiresModeration = false
     super(
@@ -22,7 +22,7 @@ export default class SequenceOfNumbers extends Prompt {
       requiresModeration
     )
 
-    this.nextNumber = nextNumber
+    this.coefficient = coefficient
   }
 
   public preprocessChatMessage(
@@ -30,9 +30,8 @@ export default class SequenceOfNumbers extends Prompt {
     tags: Record<string, any>,
     message: string
   ) {
-    if (message === `${this.nextNumber}`) {
-      this.nextNumber++
-    } else {
+    const nameLength = sender.displayName.length
+    if (message !== `${nameLength * this.coefficient}`) {
       this.playerLost(sender)
     }
   }
