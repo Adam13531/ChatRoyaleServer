@@ -83,8 +83,8 @@ export default class Moderation {
     return JSON.stringify({
       type: 'STATE',
       messages: this.messages,
-      prompt: this.prompt.prompt,
-      promptRequiresModeration: this.prompt.requiresModeration,
+      prompt: this.prompt?.prompt,
+      promptRequiresModeration: this.prompt?.requiresModeration,
     })
   }
 
