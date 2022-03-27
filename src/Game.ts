@@ -1,10 +1,8 @@
 import _ from 'lodash'
-import FizzBuzz from './prompts/FizzBuzz'
-import USStates from './prompts/USStates'
-import Colors from './prompts/Colors'
 import Prompt from './prompts/Prompt'
 import Player from './Player'
 import Moderation from './Moderation'
+import PromptChooser from './prompts/PromptChooser'
 
 enum GameState {
   Idle = 1, // waiting for a command to start things
@@ -26,10 +24,12 @@ export default class Game {
   timerEndTime: number = 0
   roundTimerId: ReturnType<typeof setTimeout> = null
   moderation: Moderation
+  promptChooser: PromptChooser
   broadcastToAll: (data: any, options?: object) => {}
 
   public constructor(broadcastToAll) {
     this.broadcastToAll = broadcastToAll
+    this.promptChooser = new PromptChooser()
     this.moderation = new Moderation()
   }
 
@@ -248,7 +248,8 @@ Names: ${playersString}`)
   private startRound() {
     this.currentState = GameState.Round
 
-    this.prompt = new USStates(this)
+    const promptClass = this.promptChooser.choosePrompt()
+    this.prompt = new promptClass(this)
 
     const startMessage = this.formRoundStartMessage(
       this.prompt.prompt,
