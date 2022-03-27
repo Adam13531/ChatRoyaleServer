@@ -73,6 +73,7 @@ function processUserCommand(cmd: string) {
       game.restart()
       break
     case 'end':
+      console.log('Manually ending the timer')
       game.roundTimeIsUp()
       break
     case 'mod':
