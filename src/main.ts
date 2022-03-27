@@ -72,6 +72,9 @@ function processUserCommand(cmd: string) {
     case 'restart':
       game.restart()
       break
+    case 'end':
+      game.roundTimeIsUp()
+      break
     case 'mod':
       game.processModeration()
       break

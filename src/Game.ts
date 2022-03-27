@@ -307,7 +307,7 @@ Names: ${playersString}`)
     this.timerEndTime = Date.now() + numMs
   }
 
-  private roundTimeIsUp = () => {
+  public roundTimeIsUp = () => {
     // Check the Prompt to see who lost by not typing anything
     this.prompt.timeIsUp(_.values(this.currentPlayers))
     this.endRound()
