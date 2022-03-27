@@ -319,7 +319,12 @@ Names: ${playersString}`)
         } else {
           // Process moderation if it hasn't been done manually already.
           this.processModeration()
-          this.startRound()
+
+          // That may have ended the round, so don't start a new one if that
+          // happened.
+          if (!this.shouldGameEnd()) {
+            this.startRound()
+          }
         }
         break
       default:
