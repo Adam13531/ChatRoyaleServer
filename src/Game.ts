@@ -123,11 +123,19 @@ Names: ${playersString}`)
     return _.map(this.allPlayers, 'displayName')
   }
 
+  private getLoserNames(): string[] {
+    return _.map(
+      _.filter(this.allPlayers, (player) => player.didLose()),
+      'displayName'
+    )
+  }
+
   public getFullStateMessage(): object {
     const state = {
       type: 'STATE',
       gameState: this.currentState,
       players: this.getAllPlayerNames(),
+      losers: this.getLoserNames(),
     }
     return state
   }
