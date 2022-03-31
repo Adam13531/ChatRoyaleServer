@@ -13,6 +13,7 @@ import FirstGenPokemon from './FirstGenPokemon'
 import Rage from './RAGE'
 import CoinFlip from './CoinFlip'
 import Emojis from './Emojis'
+import Nanotransactions from './Nanotransactions'
 
 type PromptClass =
   | typeof FizzBuzz
@@ -29,6 +30,7 @@ type PromptClass =
   | typeof Rage
   | typeof CoinFlip
   | typeof Emojis
+  | typeof Nanotransactions
 
 export default class PromptChooser {
   allPrompts: Array<PromptClass>
@@ -49,6 +51,7 @@ export default class PromptChooser {
       Rage,
       CoinFlip,
       Emojis,
+      Nanotransactions,
     ]
     console.log(`${_.size(this.allPrompts)} prompts loaded`)
     // this.allPrompts = [Emojis]
