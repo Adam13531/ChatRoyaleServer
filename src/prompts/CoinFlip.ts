@@ -30,6 +30,10 @@ export default class CoinFlip extends Prompt {
     tags: Record<string, any>,
     message: string
   ) {
+    // Be generous and allow them to type "head" or "tail"
+    if (!message.toLowerCase().endsWith('s')) {
+      message = message + 's'
+    }
     if (message.toLowerCase() != this.coinResult) {
       this.playerLost(sender, `You guessed wrong`)
     }
