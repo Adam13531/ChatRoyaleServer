@@ -31,7 +31,10 @@ export default class MessageOfLength extends Prompt {
     message: string
   ) {
     if (message.length != this.messageLength) {
-      this.playerLost(sender)
+      this.playerLost(
+        sender,
+        `Your message was ${message.length} character(s), not ${this.messageLength}`
+      )
     }
   }
 }

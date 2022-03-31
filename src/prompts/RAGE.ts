@@ -26,7 +26,7 @@ export default class Rage extends Prompt {
     message: string
   ) {
     if (message !== message.toUpperCase()) {
-      this.playerLost(sender)
+      this.playerLost(sender, `NEEDS MORE RAGE`)
     }
   }
 }

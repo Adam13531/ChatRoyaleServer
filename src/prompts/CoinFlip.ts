@@ -31,7 +31,7 @@ export default class CoinFlip extends Prompt {
     message: string
   ) {
     if (message.toLowerCase() != this.coinResult) {
-      this.playerLost(sender)
+      this.playerLost(sender, `You guessed wrong`)
     }
   }
 }

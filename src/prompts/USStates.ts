@@ -81,7 +81,7 @@ export default class USStates extends Prompt {
     const lowerCase = message.toLowerCase()
 
     if (!states.has(lowerCase)) {
-      this.playerLost(sender)
+      this.playerLost(sender, `That's not a state`)
     }
   }
 }

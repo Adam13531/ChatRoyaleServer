@@ -33,7 +33,7 @@ export default class SequenceOfNumbers extends Prompt {
     if (message === `${this.nextNumber}`) {
       this.nextNumber++
     } else {
-      this.playerLost(sender)
+      this.playerLost(sender, `You should have typed ${this.nextNumber}`)
     }
   }
 }

@@ -42,13 +42,16 @@ export default abstract class Prompt {
     )
     const messagesTypedByThisPlayer = this.messagesTypedPerPlayer[sender.userId]
     if (this.allowOneAnswerPerPerson && !_.isEmpty(messagesTypedByThisPlayer)) {
-      this.playerLost(sender)
+      this.playerLost(sender, `You typed more than one message`)
     }
 
     messagesTypedByThisPlayer.push(message)
 
-    if (this.messagesTypedByAnyone.has(message.toLowerCase())) {
-      this.playerLost(sender)
+    if (
+      !this.duplicatesAllowed &&
+      this.messagesTypedByAnyone.has(message.toLowerCase())
+    ) {
+      this.playerLost(sender, `Your answer was not unique`)
     }
     this.messagesTypedByAnyone.add(message.toLowerCase())
 
@@ -64,20 +67,21 @@ export default abstract class Prompt {
       const messagesTypedByThisPlayer =
         this.messagesTypedPerPlayer[player.userId]
       if (_.isEmpty(messagesTypedByThisPlayer)) {
-        this.playerLost(player, false)
+        this.playerLost(player, `Time ran out`, false)
       }
     })
   }
 
-  protected makePlayerLoseByName(playerName: string) {
-    this.game.playerLostByName(playerName)
+  protected makePlayerLoseByName(playerName: string, reason: string) {
+    this.game.playerLostByName(playerName, reason)
   }
 
   protected playerLost(
     player: Player,
+    reason: string,
     endRoundIfOnePlayerRemains: boolean = true
   ) {
-    this.game.playerLost(player, endRoundIfOnePlayerRemains)
+    this.game.playerLost(player, reason, endRoundIfOnePlayerRemains)
   }
 
   protected preprocessChatMessage(

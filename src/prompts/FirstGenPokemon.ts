@@ -183,7 +183,7 @@ export default class FirstGenPokemon extends Prompt {
     const lowerCase = message.toLowerCase()
 
     if (!pokemon.has(lowerCase)) {
-      this.playerLost(sender)
+      this.playerLost(sender, `That isn't a first-gen Pokémon`)
     }
   }
 }

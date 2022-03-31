@@ -26,6 +26,6 @@ export default class EliminateSomeone extends Prompt {
     tags: Record<string, any>,
     message: string
   ) {
-    this.makePlayerLoseByName(message)
+    this.makePlayerLoseByName(message, `${sender.displayName} eliminated you`)
   }
 }

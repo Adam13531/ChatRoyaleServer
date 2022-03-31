@@ -77,15 +77,16 @@ export default class Game {
     return this.allPlayersByName[playerName.toLowerCase()]
   }
 
-  public playerLostByName(playerName: string) {
+  public playerLostByName(playerName: string, reason: string) {
     const player = this.getPlayerByName(playerName)
     if (!_.isNil(player)) {
-      this.playerLost(player)
+      this.playerLost(player, reason)
     }
   }
 
   public playerLost(
     player: Player,
+    reason: string,
     endRoundIfOnePlayerRemains: boolean = true
   ) {
     // A player can't lose if we're not tracking them or they already lost
@@ -97,7 +98,11 @@ export default class Game {
     this.allPlayers[player.userId].lostInRound = this.roundNumber
 
     console.log(`Player #${player.joinOrder} lost: ${player.displayName}`)
-    this.broadcastToAll(this.formPlayerLostMessage(player.displayName))
+
+    // Everyone will know why this person lost even though it only concerns the
+    // loser, but there are only two days left until April Fool's Day and I
+    // don't authenticate websockets with a Twitch name.
+    this.broadcastToAll(this.formPlayerLostMessage(player.displayName, reason))
 
     if (_.size(this.currentPlayers) <= 1 && endRoundIfOnePlayerRemains) {
       this.endRound()
@@ -214,7 +219,7 @@ Names: ${playersString}`)
     )
     _.forEach(peopleToDisqualify, (userId) => {
       const player = this.allPlayers[userId]
-      this.playerLost(player, false)
+      this.playerLost(player, 'Mod hammer 🔨', false)
     })
 
     // Now that all players are processed, we can potentially end the game.
@@ -256,8 +261,8 @@ Names: ${playersString}`)
     return JSON.stringify({ type: 'ADD_PLAYER', player: displayName })
   }
 
-  private formPlayerLostMessage(displayName: string) {
-    return JSON.stringify({ type: 'PLAYER_LOST', player: displayName })
+  private formPlayerLostMessage(displayName: string, reason: string) {
+    return JSON.stringify({ type: 'PLAYER_LOST', player: displayName, reason })
   }
 
   public getStateStringFromState(state: GameState): string {

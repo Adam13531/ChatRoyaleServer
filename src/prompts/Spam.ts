@@ -38,7 +38,7 @@ export default class Spam extends Prompt {
       !_.isNil(messagesFromThisPlayer) &&
       _.size(messagesFromThisPlayer) > this.numMessages
     ) {
-      this.playerLost(sender)
+      this.playerLost(sender, `You typed too many messages`)
     }
   }
 }

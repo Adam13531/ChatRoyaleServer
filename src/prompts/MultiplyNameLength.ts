@@ -31,8 +31,9 @@ export default class MultiplyNameLength extends Prompt {
     message: string
   ) {
     const nameLength = sender.displayName.length
-    if (message !== `${nameLength * this.coefficient}`) {
-      this.playerLost(sender)
+    const desiredMessage = `${nameLength * this.coefficient}`
+    if (message !== desiredMessage) {
+      this.playerLost(sender, `You should have typed ${desiredMessage}`)
     }
   }
 }

@@ -32,7 +32,7 @@ export default class GottaGoFast extends Prompt {
   ) {
     const numPeopleWhoTyped = _.size(_.keys(this.messagesTypedPerPlayer))
     if (numPeopleWhoTyped > this.numWinners) {
-      this.playerLost(sender)
+      this.playerLost(sender, `You weren't fast enough`)
     }
   }
 }

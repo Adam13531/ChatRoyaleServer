@@ -29,19 +29,19 @@ export default class FizzBuzz extends Prompt {
     const name = sender.displayName.toLowerCase()
     const hasA = _.includes(name, 'a')
     const hasE = _.includes(name, 'e')
-    let validMessage: boolean
+    let desiredMessage: string
     if (hasA && hasE) {
-      validMessage = message === 'fizzbuzz'
+      desiredMessage = 'fizzbuzz'
     } else if (hasA) {
-      validMessage = message === 'fizz'
+      desiredMessage = 'fizz'
     } else if (hasE) {
-      validMessage = message === 'buzz'
+      desiredMessage = 'buzz'
     } else {
-      validMessage = message === 'buzzfizz'
+      desiredMessage = 'buzzfizz'
     }
 
-    if (!validMessage) {
-      this.playerLost(sender)
+    if (message !== desiredMessage) {
+      this.playerLost(sender, `You should have typed ${desiredMessage}`)
     }
   }
 }
