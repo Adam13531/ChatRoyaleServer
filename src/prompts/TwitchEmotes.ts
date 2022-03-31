@@ -296,7 +296,7 @@ export default class TwitchEmotes extends Prompt {
     const prompt = 'Type any global Twitch emote (like Kappa or PogChamp).'
     const duplicatesAllowed = false
     const timer = 16
-    const allowOneAnswerPerPerson = true
+    const allowOneAnswerPerPerson = false
     const requiresModeration = false
     super(
       game,

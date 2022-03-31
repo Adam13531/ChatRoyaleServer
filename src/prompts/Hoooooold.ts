@@ -8,7 +8,7 @@ export default class Hoooooold extends Prompt {
     const prompt = `Get a message ready, but don't send it until <2 seconds are on the timer.`
     const duplicatesAllowed = false
     const timer = 11
-    const allowOneAnswerPerPerson = true
+    const allowOneAnswerPerPerson = false
     const requiresModeration = false
     super(
       game,
