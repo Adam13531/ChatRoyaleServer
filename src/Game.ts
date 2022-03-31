@@ -238,11 +238,13 @@ Names: ${playersString}`)
     if (numRemainingPlayers == 0) {
       // End with no winner
       this.currentState = GameState.End
+      console.log(`😂 Everybody lost!`)
     } else if (numRemainingPlayers == 1) {
       // End with a winner
       this.currentState = GameState.End
       const finalPlayer = _.first(_.values(this.currentPlayers))
       winner = finalPlayer.displayName
+      console.log(`🎉 ${winner} won!`)
     } else {
       // Not at the end yet
       this.currentState = GameState.InBetween

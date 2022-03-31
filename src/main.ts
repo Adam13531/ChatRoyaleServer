@@ -29,16 +29,25 @@ function startSocketServer() {
   // This is purely for connecting websockets. We don't trust clients to tell us
   // their Twitch name; we'll get that from the chat stream.
   wss.on('connection', function connection(ws) {
-    console.log(`Got a new connection. Total: ${_.size(wss.clients)}`)
-    ws.on('message', function message(data) {
-      console.log('received: %s', data)
-    })
+    const numConnections = _.size(wss.clients)
+
+    // If there are tons of people, then don't spam the console.
+    if (numConnections < 20) {
+      console.log(`Got a new connection. Total: ${numConnections}`)
+    }
+
+    // We don't care about incoming messages. Those happen through Twitch chat,
+    // where the user is authenticated. Websockets are just for outgoing data.
+    // ws.on('message', function message(data) {
+    //   console.log('received: %s', data)
+    // })
 
     ws.on('close', () => {
-      console.log('Websocket closed')
+      if (numConnections < 20) {
+        console.log(`Websocket closed. Total: ${_.size(wss.clients)}`)
+      }
     })
 
-    console.log('Sending something')
     ws.send(JSON.stringify(game.getFullStateMessage()))
   })
 }
@@ -115,7 +124,7 @@ async function startTwitchChat() {
 
   console.log(`Connecting as ${botName} to Twitch channel "${gameChannel}"`)
   tmiClient = new tmi({
-    options: { debug: true },
+    options: { debug: false },
     connection: {
       reconnect: true,
       secure: true,
@@ -163,7 +172,6 @@ async function main() {
   initGame()
   await startTwitchChat()
   startSocketServer()
-  console.log('Running')
   prompt()
 }
 

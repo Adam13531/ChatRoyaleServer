@@ -1,5 +1,6 @@
 {
   "name": "server",
+  "private": true,
   "scripts": {
     "build": "tsc --project .",
     "start": "yarn run build && node dist/main.js"
