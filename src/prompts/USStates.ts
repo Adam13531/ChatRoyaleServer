@@ -60,7 +60,7 @@ export default class USStates extends Prompt {
   constructor(game: Game) {
     const prompt = 'Name a US state.'
     const duplicatesAllowed = false
-    const timer = 20
+    const timer = 22
     const allowOneAnswerPerPerson = true
     const requiresModeration = false
     super(

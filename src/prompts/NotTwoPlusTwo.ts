@@ -7,7 +7,7 @@ export default class NotTwoPlusTwo extends Prompt {
   constructor(game: Game) {
     const prompt = "What isn't 2+2?"
     const duplicatesAllowed = false
-    const timer = 6
+    const timer = 12
     const allowOneAnswerPerPerson = true
     const requiresModeration = true
     super(

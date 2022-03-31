@@ -10,7 +10,7 @@ export default class MultiplyNameLength extends Prompt {
     const coefficient = _.random(13, 99)
     const prompt = `Multiply the number of characters in your name by ${coefficient}. What is the result?`
     const duplicatesAllowed = true
-    const timer = 20
+    const timer = 21
     const allowOneAnswerPerPerson = true
     const requiresModeration = false
     super(

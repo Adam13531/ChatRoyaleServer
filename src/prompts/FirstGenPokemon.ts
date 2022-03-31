@@ -162,7 +162,7 @@ export default class FirstGenPokemon extends Prompt {
   constructor(game: Game) {
     const prompt = 'Name a first-generation Pokémon.'
     const duplicatesAllowed = false
-    const timer = 20
+    const timer = 23
     const allowOneAnswerPerPerson = true
     const requiresModeration = false
     super(

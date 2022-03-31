@@ -10,7 +10,7 @@ export default class CoinFlip extends Prompt {
     const coinResult = _.random(0, 1) === 0 ? 'heads' : 'tails'
     const prompt = `I have flipped a virtual coin. Is it heads or tails?`
     const duplicatesAllowed = true
-    const timer = 10
+    const timer = 14
     const allowOneAnswerPerPerson = true
     const requiresModeration = false
     super(

@@ -3,7 +3,7 @@ import Game from '../Game'
 import Player from '../Player'
 import Prompt from './Prompt'
 
-// You can't lose this one.
+// You can't lose this one unless you type nothing.
 export default class Nanotransactions extends Prompt {
   constructor(game: Game) {
     const prompt = `How many picopennies would you spend on this game if it had nanotransactions?`

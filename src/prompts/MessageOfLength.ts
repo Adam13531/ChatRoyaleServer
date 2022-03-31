@@ -10,7 +10,7 @@ export default class MessageOfLength extends Prompt {
     const messageLength = _.random(16, 100)
     const prompt = `Type a message exactly ${messageLength} characters long.`
     const duplicatesAllowed = false
-    const timer = 20
+    const timer = 21
     const allowOneAnswerPerPerson = true
     const requiresModeration = false
     super(

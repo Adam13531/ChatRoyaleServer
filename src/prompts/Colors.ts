@@ -7,7 +7,7 @@ export default class Colors extends Prompt {
   constructor(game: Game) {
     const prompt = 'Name a color.'
     const duplicatesAllowed = false
-    const timer = 8
+    const timer = 14
     const allowOneAnswerPerPerson = true
     const requiresModeration = true
     super(

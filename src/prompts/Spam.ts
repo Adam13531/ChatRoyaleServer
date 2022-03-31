@@ -10,7 +10,7 @@ export default class Spam extends Prompt {
     const numMessages = _.random(3, 4)
     const prompt = `Type exactly ${numMessages} messages.`
     const duplicatesAllowed = false
-    const timer = 20
+    const timer = 21
     const allowOneAnswerPerPerson = false
     const requiresModeration = false
     super(

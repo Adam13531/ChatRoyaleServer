@@ -8,7 +8,7 @@ export default class EliminateSomeone extends Prompt {
     const prompt =
       'Type the name of a player. They will be eliminated. You can do this as many times as you want.'
     const duplicatesAllowed = true
-    const timer = 25
+    const timer = 26
     const allowOneAnswerPerPerson = false
     const requiresModeration = false
     super(
