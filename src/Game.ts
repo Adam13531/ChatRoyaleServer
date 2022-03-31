@@ -135,13 +135,18 @@ export default class Game {
     this.broadcastToAll(JSON.stringify(this.getFullStateMessage()))
   }
 
+  // Return value is in seconds/
+  public getRemainingTimerTime() {
+    return (this.timerEndTime - Date.now()) / 1000
+  }
+
   public printStatus() {
     const numAllPlayers = _.size(this.allPlayers)
     const numCurrentPlayers = _.size(this.currentPlayers)
     const playersString = this.getPlayersRemainingString()
     let timerString = 'No timer running'
     if (this.roundTimerId) {
-      const remainingTime = (this.timerEndTime - Date.now()) / 1000
+      const remainingTime = this.getRemainingTimerTime()
       if (remainingTime > 0) {
         timerString = `${remainingTime}s remaining`
       } else {

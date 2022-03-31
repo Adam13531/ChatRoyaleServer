@@ -15,6 +15,9 @@ import CoinFlip from './CoinFlip'
 import Emojis from './Emojis'
 import Nanotransactions from './Nanotransactions'
 import Chatcatenation from './Chatcatenation'
+import Hoooooold from './Hoooooold'
+import ListenToAdam from './ListenToAdam'
+import TwitchEmotes from './TwitchEmotes'
 
 type PromptClass =
   | typeof FizzBuzz
@@ -33,6 +36,9 @@ type PromptClass =
   | typeof Emojis
   | typeof Nanotransactions
   | typeof Chatcatenation
+  | typeof Hoooooold
+  | typeof ListenToAdam
+  | typeof TwitchEmotes
 
 export default class PromptChooser {
   allPrompts: Array<PromptClass>
@@ -55,6 +61,9 @@ export default class PromptChooser {
       Emojis,
       Nanotransactions,
       Chatcatenation,
+      Hoooooold,
+      ListenToAdam,
+      TwitchEmotes,
     ]
     console.log(`${_.size(this.allPrompts)} prompts loaded`)
     // this.allPrompts = [Emojis]
