@@ -3,10 +3,18 @@ import Game from '../Game'
 import Player from '../Player'
 import Prompt from './Prompt'
 
+const fizzWords = ['fizz', 'fozz', 'fuzz']
+const buzzWords = ['bizz', 'bozz', 'bazz', 'buzz']
+
 export default class FizzBuzz extends Prompt {
+  fizzWord: string
+  buzzWord: string
+
   constructor(game: Game) {
-    const prompt =
-      'If your name has an A in it, type "fizz". If it has an E, type "buzz". If it has both, type "fizzbuzz". If it has neither, type "buzzfizz".'
+    const fizzWord = _.sample(fizzWords)
+    const buzzWord = _.sample(buzzWords)
+
+    const prompt = `If your name has an A in it, type "${fizzWord}". If it has an E, type "${buzzWord}". If it has both, type "${fizzWord}${buzzWord}". If it has neither, type "${buzzWord}${fizzWord}".`
     const duplicatesAllowed = true
     const timer = 20
     const allowOneAnswerPerPerson = true
@@ -19,6 +27,9 @@ export default class FizzBuzz extends Prompt {
       allowOneAnswerPerPerson,
       requiresModeration
     )
+
+    this.fizzWord = fizzWord
+    this.buzzWord = buzzWord
   }
 
   public preprocessChatMessage(
@@ -31,13 +42,13 @@ export default class FizzBuzz extends Prompt {
     const hasE = _.includes(name, 'e')
     let desiredMessage: string
     if (hasA && hasE) {
-      desiredMessage = 'fizzbuzz'
+      desiredMessage = `${this.fizzWord}${this.buzzWord}`
     } else if (hasA) {
-      desiredMessage = 'fizz'
+      desiredMessage = `${this.fizzWord}`
     } else if (hasE) {
-      desiredMessage = 'buzz'
+      desiredMessage = `${this.buzzWord}`
     } else {
-      desiredMessage = 'buzzfizz'
+      desiredMessage = `${this.buzzWord}${this.fizzWord}`
     }
 
     if (message !== desiredMessage) {
