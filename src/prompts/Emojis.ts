@@ -5,7 +5,7 @@ import Prompt from './Prompt'
 
 export default class Emojis extends Prompt {
   constructor(game: Game) {
-    const prompt = 'Type a single emoji (Twitch emote do not count).'
+    const prompt = 'Type a single emoji (Twitch emotes do not count).'
     const duplicatesAllowed = false
     const timer = 12
     const allowOneAnswerPerPerson = true

@@ -8,7 +8,7 @@ export default class MultiplyNameLength extends Prompt {
 
   constructor(game: Game) {
     const coefficient = _.random(13, 99)
-    const prompt = `Multiple the number of characters in your name by ${coefficient}. What is the result?`
+    const prompt = `Multiply the number of characters in your name by ${coefficient}. What is the result?`
     const duplicatesAllowed = true
     const timer = 20
     const allowOneAnswerPerPerson = true
