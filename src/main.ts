@@ -52,13 +52,15 @@ function startSocketServer() {
   })
 }
 
-function sendToAll(msg: any) {
-  console.log(`Sending to all: ${msg}`)
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(msg)
-    }
-  })
+function help() {
+  console.log('-------------------------')
+  console.log('start: start round or advance game state')
+  console.log('restart: restart game')
+  console.log('end: end timer')
+  console.log('status: print game status')
+  console.log('mod: process moderation')
+  console.log('say: echo to all clients')
+  console.log('-------------------------')
 }
 
 function processUserCommand(cmd: string) {
@@ -72,6 +74,9 @@ function processUserCommand(cmd: string) {
   const firstWord = words[0]
   const restOfWords = words.slice(1)
   switch (firstWord) {
+    case 'help':
+      help()
+      break
     case 'start':
       game.handleStartMessage()
       break
@@ -94,10 +99,12 @@ function processUserCommand(cmd: string) {
         break
       }
 
-      sendToAll(cmd.substr(cmd.indexOf(' ') + 1))
+      const message = cmd.substr(cmd.indexOf(' ') + 1)
+      broadcastToAll(JSON.stringify({ type: 'SAY', message }))
       break
     default:
       console.error(`Unrecognized command: "${firstWord}`)
+      help()
       break
   }
 }
