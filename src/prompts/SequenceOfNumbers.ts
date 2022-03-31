@@ -11,7 +11,7 @@ export default class SequenceOfNumbers extends Prompt {
     const prompt = `Type the next number in the sequence. The first person to send a message should start by typing ${nextNumber}.`
     const duplicatesAllowed = false
     const timer = 40
-    const allowOneAnswerPerPerson = true
+    const allowOneAnswerPerPerson = false
     const requiresModeration = false
     super(
       game,
