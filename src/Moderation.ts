@@ -138,7 +138,7 @@ export default class Moderation {
       const name = url.searchParams.get('name')
       const password = url.searchParams.get('password')
 
-      if (password != 'hunter2') {
+      if (password != 'foolsof2022april') {
         ws.send('bad password')
         ws.close()
         return
