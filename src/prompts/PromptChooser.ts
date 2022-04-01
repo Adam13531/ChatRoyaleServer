@@ -18,6 +18,7 @@ import Chatcatenation from './Chatcatenation'
 import Hoooooold from './Hoooooold'
 import ListenToAdam from './ListenToAdam'
 import TwitchEmotes from './TwitchEmotes'
+import HoTtAkEs from './HoTtAkEs'
 
 type PromptClass =
   | typeof FizzBuzz
@@ -39,6 +40,7 @@ type PromptClass =
   | typeof Hoooooold
   | typeof ListenToAdam
   | typeof TwitchEmotes
+  | typeof HoTtAkEs
 
 export default class PromptChooser {
   allPrompts: Array<PromptClass>
@@ -64,6 +66,7 @@ export default class PromptChooser {
       Hoooooold,
       ListenToAdam,
       TwitchEmotes,
+      HoTtAkEs,
     ]
     console.log(`${_.size(this.allPrompts)} prompts loaded`)
     // this.allPrompts = [Emojis]
