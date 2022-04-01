@@ -41,4 +41,15 @@ export default class Spam extends Prompt {
       this.playerLost(sender, `You typed too many messages`)
     }
   }
+
+  public timeIsUp(currentPlayers: Player[]) {
+    _.forEach(currentPlayers, (player) => {
+      const messagesTypedByThisPlayer =
+        this.messagesTypedPerPlayer[player.userId]
+      const numTyped = _.size(messagesTypedByThisPlayer)
+      if (_.size(messagesTypedByThisPlayer) !== this.numMessages) {
+        this.playerLost(player, `You only typed ${numTyped} message(s)`, false)
+      }
+    })
+  }
 }
